@@ -1,11 +1,38 @@
 import { GraphQLServer } from 'graphql-yoga';
 
+//Demo user Data
+const users = [
+  {
+    id: '1',
+    name: 'Ivan',
+    email: 'ivan@example.com',
+    age: 32,
+  },
+  {
+    id: '2',
+    name: 'Sarah',
+    email: 'sarah@example.com',
+  },
+  {
+    id: '3',
+    name: 'Mike',
+    email: 'mike@example.com',
+    age: 37,
+  },
+];
+
+//Demo posts Data
+
+const posts = [
+  { id: '1', title: 'Post 1q', body: 'Body of Post 1', published: false },
+  { id: '2', title: 'Post 2p', body: 'Body of Post 2', published: true },
+  { id: '3', title: 'Post 3', body: 'Body of Post 3q', published: false },
+];
 // Type definitions (schema)
 const typeDefs = `
     type Query {
-      add(numbers: [Float!]!): Float!
-      greeting(name: String, position: String): String!
-      grades: [Int!]!
+      users(query: String): [User!]!
+      posts(query: String): [Post!]!
       me: User!
       lastPost: Post
     }
@@ -28,25 +55,28 @@ const typeDefs = `
 // Resolvers
 const resolvers = {
   Query: {
-    add(parent, args, ctx, info) {
-      if (args.numbers.length === 0) {
-        return 0;
+    users(parent, args, ctx, info) {
+      if (!args.query) {
+        return users;
       }
-      return args.numbers.reduce((accumalator, current) => {
-        return accumalator + current;
+
+      return users.filter((user) => {
+        return user.name.toLowerCase().includes(args.query.toLowerCase());
       });
     },
-    greeting(parent, args, ctx, info) {
-      if (args.name && args.position) {
-        return `Hello, ${args.name} You are my favorite ${args.position}`;
-      } else {
-        return 'Hello';
+    posts(parent, args, ctx, info) {
+      if (!args.query) {
+        return posts;
       }
+
+      return posts.filter((post) => {
+        return (
+          post.title.toLowerCase().includes(args.query.toLowerCase()) ||
+          post.body.toLowerCase().includes(args.query.toLowerCase())
+        );
+      });
     },
-    grades(parent, args, ctx, info) {
-      return [99, 80, 10, 95];
-    },
-    me() {
+    me(parent, args, ctx, info) {
       return {
         id: '12345',
         name: 'Mike',
@@ -54,7 +84,7 @@ const resolvers = {
         age: 28,
       };
     },
-    lastPost() {
+    lastPost(parent, args, ctx, info) {
       return {
         id: '123asd2dsqwfdsq2',
         title: 'SuperPost',
