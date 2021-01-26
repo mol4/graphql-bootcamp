@@ -22,7 +22,6 @@ const users = [
 ];
 
 //Demo posts Data
-
 const posts = [
   {
     id: '1',
@@ -67,11 +66,69 @@ const posts = [
     author: '3',
   },
 ];
+
+//Demo comments data
+const comments = [
+  {
+    id: '111',
+    text: 'Qwerty1',
+  },
+  {
+    id: '112',
+    text: 'Qwerty2',
+  },
+  {
+    id: '113',
+    text: 'Qwerty3',
+  },
+  {
+    id: '114',
+    text: 'Qwerty4',
+  },
+  {
+    id: '115',
+    text: 'Qwerty5',
+  },
+  {
+    id: '116',
+    text: 'Qwerty6',
+  },
+  {
+    id: '117',
+    text: 'Qwerty7',
+  },
+  {
+    id: '118',
+    text: 'Qwerty8',
+  },
+  {
+    id: '119',
+    text: 'Qwerty9',
+  },
+  {
+    id: '120',
+    text: 'Qwerty20',
+  },
+  {
+    id: '121',
+    text: 'Qwerty21',
+  },
+  {
+    id: '122',
+    text: 'Qwerty22',
+  },
+  {
+    id: '123',
+    text: 'Qwerty23',
+  },
+];
+
 // Type definitions (schema)
 const typeDefs = `
     type Query {
       users(query: String): [User!]!
       posts(query: String): [Post!]!
+      comments: [Comment!]!
       me: User!
       lastPost: Post
     }
@@ -91,6 +148,11 @@ const typeDefs = `
       published: Boolean!
       author: User!
     }
+
+    type Comment {
+      id: ID!
+      text: String!
+    }
 `;
 
 // Resolvers
@@ -109,13 +171,15 @@ const resolvers = {
       if (!args.query) {
         return posts;
       }
-
       return posts.filter((post) => {
         return (
           post.title.toLowerCase().includes(args.query.toLowerCase()) ||
           post.body.toLowerCase().includes(args.query.toLowerCase())
         );
       });
+    },
+    comments(parent, args, ctx, info) {
+      return comments;
     },
     me(parent, args, ctx, info) {
       return {
