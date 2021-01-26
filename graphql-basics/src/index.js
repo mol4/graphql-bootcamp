@@ -44,27 +44,6 @@ const posts = [
     published: false,
     author: '3',
   },
-  {
-    id: '10',
-    title: 'Post 10 GraphQL',
-    body: 'Body of Post 10 ...',
-    published: false,
-    author: '1',
-  },
-  {
-    id: '11',
-    title: 'Post 11 GraphQL 11..',
-    body: 'Body of Post 11',
-    published: true,
-    author: '2',
-  },
-  {
-    id: '12',
-    title: 'Post 12',
-    body: 'Body of Post 12',
-    published: false,
-    author: '3',
-  },
 ];
 
 //Demo comments data
@@ -73,66 +52,43 @@ const comments = [
     id: '111',
     text: 'Qwerty1',
     author: '1',
+    post: '1',
   },
   {
     id: '112',
     text: 'Qwerty2',
     author: '2',
+    post: '2',
   },
   {
     id: '113',
     text: 'Qwerty3',
     author: '3',
-  },
-  {
-    id: '114',
-    text: 'Qwerty4',
-    author: '1',
-  },
-  {
-    id: '115',
-    text: 'Qwerty5',
-    author: '2',
-  },
-  {
-    id: '116',
-    text: 'Qwerty6',
-    author: '3',
+    post: '3',
   },
   {
     id: '117',
     text: 'Qwerty7',
     author: '1',
+    post: '1',
   },
   {
     id: '118',
     text: 'Qwerty8',
     author: '2',
+    post: '2',
   },
   {
     id: '119',
     text: 'Qwerty9',
     author: '3',
-  },
-  {
-    id: '120',
-    text: 'Qwerty20',
-    author: '1',
-  },
-  {
-    id: '121',
-    text: 'Qwerty21',
-    author: '2',
-  },
-  {
-    id: '122',
-    text: 'Qwerty22',
-    author: '3',
+    post: '3',
   },
   {
     id: '123',
     text: 'Qwerty23',
     author: '1',
+    post: '1',
   },
 ];
 
@@ -161,12 +117,14 @@ const typeDefs = `
       body: String!
       published: Boolean!
       author: User!
+      comments: [Comment!]!
     }
 
     type Comment {
       id: ID!
       text: String!
       author: User!
+      post: Post!
     }
 `;
 
@@ -219,6 +177,11 @@ const resolvers = {
         return user.id === parent.author;
       });
     },
+    comments(parent, args, ctx, info) {
+      return comments.filter((comment) => {
+        return comment.post === parent.id;
+      });
+    },
   },
   User: {
     posts(parent, args, ctx, info) {
@@ -230,12 +193,17 @@ const resolvers = {
       return comments.filter((comment) => {
         return comment.author === parent.id;
       });
-    }
+    },
   },
   Comment: {
     author(parent, args, ctx, info) {
       return users.find((user) => {
         return user.id === parent.author;
+      });
+    },
+    post(parent, args, ctx, info) {
+      return posts.find((post) => {
+        return post.id === parent.post;
       });
     },
   },
