@@ -72,54 +72,67 @@ const comments = [
   {
     id: '111',
     text: 'Qwerty1',
+    author: '1',
   },
   {
     id: '112',
     text: 'Qwerty2',
+    author: '2',
   },
   {
     id: '113',
     text: 'Qwerty3',
+    author: '3',
   },
   {
     id: '114',
     text: 'Qwerty4',
+    author: '1',
   },
   {
     id: '115',
     text: 'Qwerty5',
+    author: '2',
   },
   {
     id: '116',
     text: 'Qwerty6',
+    author: '3',
   },
   {
     id: '117',
     text: 'Qwerty7',
+    author: '1',
   },
   {
     id: '118',
     text: 'Qwerty8',
+    author: '2',
   },
   {
     id: '119',
     text: 'Qwerty9',
+    author: '3',
   },
   {
     id: '120',
     text: 'Qwerty20',
+    author: '1',
   },
   {
     id: '121',
     text: 'Qwerty21',
+    author: '2',
   },
   {
     id: '122',
     text: 'Qwerty22',
+    author: '3',
   },
   {
     id: '123',
     text: 'Qwerty23',
+    author: '1',
   },
 ];
 
@@ -139,6 +152,7 @@ const typeDefs = `
       email: String!
       age: Int
       posts: [Post!]!
+      comments: [Comment!]!
     }
 
     type Post {
@@ -152,6 +166,7 @@ const typeDefs = `
     type Comment {
       id: ID!
       text: String!
+      author: User!
     }
 `;
 
@@ -209,6 +224,18 @@ const resolvers = {
     posts(parent, args, ctx, info) {
       return posts.filter((post) => {
         return post.author === parent.id;
+      });
+    },
+    comments(parent, args, ctx, info) {
+      return comments.filter((comment) => {
+        return comment.author === parent.id;
+      });
+    }
+  },
+  Comment: {
+    author(parent, args, ctx, info) {
+      return users.find((user) => {
+        return user.id === parent.author;
       });
     },
   },
