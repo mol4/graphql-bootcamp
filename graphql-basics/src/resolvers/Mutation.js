@@ -109,6 +109,8 @@ const Mutation = {
     if (typeof data.published === 'boolean') {
       post.published = data.published;
     }
+
+    return post;
   },
 
   createComment(parent, args, { db }, info) {
@@ -147,9 +149,10 @@ const Mutation = {
       throw new Error('comment not found');
     }
 
-    if (typeof data.text !== 'string') {
+    if (typeof data.text === 'string') {
       comment.text = data.text;
     }
+    return comment;
   },
 };
 
